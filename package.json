@@ -1,5 +1,5 @@
 {
-  "name": "html-cs-js-demo",
+  "name": "final project",
   "version": "1.0.0",
   "description": "This is the base code for an html+css+js demo non-assignment (extra credit).",
   "main": "server.js",
@@ -20,7 +20,7 @@
     "express",
     "server"
   ],
-  "author": "@jdmar3",
+  "author": "harivig",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "express": "^4.18.2",
