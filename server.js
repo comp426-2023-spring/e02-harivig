@@ -2,10 +2,9 @@
 // Create require function 
 // https://nodejs.org/docs/latest-v18.x/api/module.html#modulecreaterequirefilename
 import { createRequire } from 'node:module';
+import bodyParser from "body-parser";
 import { rps } from "./lib/rpsls.js";
 import { rpsls } from "./lib/rpsls.js";
-import minimist from "minimist";
-import express from "express";
 
 const require = createRequire(import.meta.url);
 // The above two lines allow us to use ES methods and CJS methods for loading
@@ -79,58 +78,80 @@ app.use('/', express.static(staticpath))
 // Create app listener
 const server = app.listen(port)
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app_endpoint = new RegExp("^\/app(|\/)$");
+const rps_endpoint = new RegExp("^\/app\/rps(|\/)$");
+const rpsls_endpoint = new RegExp("^\/app\/rpsls(|\/)$");
+const rps_play_only_endpoint = /^\/app\/rps\/play\/((r|R)ock|(p|P)aper|(s|S)cissors)(|\/)$/;
+const rpsls_play_only_endpoint = /^\/app\/rpsls\/play\/((r|R)ock|(p|P)aper|(s|S)cissors|(l|L)izard|(s|S)pock)(|\/)$/;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/app', (req, res) => {
-	res.status(200).send("200 OK");
+app.post("/app/rps/play", (req, res) => {
+    try {
+        res.send(JSON.stringify(rps(req.body.shot)));
+    }
+    catch (e) {
+        res.status(400).send("404 NOT FOUND");
+    }
 });
 
-app.get('/app/rps', (req, res) => {
-	res.status(200).send(rps());
-});
-
-app.get('/app/rpsls', (req, res) => {
-	res.status(200).send(rpsls());
-});
-
-
-app.get('/app/rps/play', (req, res) => {
-	res.status(200).send(rps(req.query.shot));
-});
-
-app.get('/app/rpsls/play', (req, res) => {
-	res.status(200).send(rpsls(req.query.shot));
-});
-
-
-
-app.post('/app/rps/play/', (req, res) => {
-	res.status(200).send(rps(req.body.shot));
-});
-
-app.post('/app/rpsls/play/', (req, res) => {
-	res.status(200).send(rpsls(req.body.shot));
+app.post("/app/rpsls/play", (req, res) => {
+    try {
+        res.send(JSON.stringify(rpsls(req.body.shot)));
+    }
+    catch (e) {
+        res.status(400).send("404 NOT FOUND");
+    }
 });
 
 
-app.get('/app/rps/play/:shot', (req, res) => {
-	res.status(200).send(rps(req.params.shot));
+app.get("/app/rps/play/", (req, res) => {
+    try {
+        res.send(JSON.stringify(rps(req.query.shot)));
+    }
+    catch (e) {
+        res.status(400).send("404 NOT FOUND");
+    }
 });
 
-app.get('/app/rpsls/play/:shot', (req, res) => {
-	res.status(200).send(rpsls(req.params.shot));
+
+app.get("/app/rpsls/play", (req, res) => {
+    try {
+        res.send(JSON.stringify(rpsls(req.query.shot)));
+    }
+    catch (e) {
+        res.status(400).send("404 NOT FOUND");
+    }
 });
 
 
-app.get('*', (req, res) => {
-	res.status(404).send('404 NOT FOUND');
+app.get("*", (req, res) => {
+    var path = req.path;
+    if (app_endpoint.test(path)) {
+        res.status(200).send("200 OK");
+    
+    } else if (rps_endpoint.test(path)) {
+        res.send(JSON.stringify(rps()));
+    
+    } else if (rpsls_endpoint.test(path)) {
+        res.send(JSON.stringify(rpsls()));
+
+    } else if (rps_play_only_endpoint.test(path)) {
+        path = path.replace("/app/rps/play/", "");
+        path = path.replace("/", "");
+        res.send(JSON.stringify(rps(path)));
+    
+    } else if (rpsls_play_only_endpoint.test(path)) {
+        path = path.replace("/app/rpsls/play/", "");
+        path = path.replace("/", "");
+        res.send(JSON.stringify(rpsls(path)));
+    
+    } else {
+        res.status(400).send("404 NOT FOUND");
+    }
 });
 
-app.listen(port, () => {
-	console.log(`Runnning on port ${port}`);
-});
 
 // Create a log entry on start
 let startlog = new Date().toISOString() + ' HTTP server started on port ' + port + '\n'
