@@ -17,7 +17,7 @@
 		<form id="opponent-and-game" onsubmit="firstsubmit(event)">
             Which game would you like to play?
             <br><br>
-            <input type="radio" id="rps" name="game" value="rps" checked="checked" onclick="playingrps()">
+            <input type="radio" id="rps" name="game" value="rps" checked onclick="playingrps()">
 			<label for="rps">Play rock, paper, scissors?</label>
 			<br><br>
 			<input type="radio" id="rpsls" name="game" value="rpsls" onclick="playingrpsls()">
@@ -31,8 +31,8 @@
             <button type="button" id="first-submit" onclick="firstsubmit()">Submit</button>
             <br><br>
         </form>
-        <form id="rps-input" hidden>
-            <input type="radio" id="rock" name="shot" value="rock" class="rps shots" checked="checked" onclick="playgamefromrpsorrpsls(0)">
+        <form id="rps-input" onsubmit="secondsubmit(event)" hidden>
+            <input type="radio" id="rock" name="shot" value="rock" class="rps shots" checked onclick="playgamefromrpsorrpsls(0)">
             <label class="shots rps">Rock</label>
 			<input type="radio" id="paper" name="shot" value="paper" class="rps shots" onclick="playgamefromrpsorrpsls(1)">
 			<label class="shots rps">Paper</label>
@@ -50,7 +50,7 @@
         <div>
             <button type="button" id="startover" onclick="startOver()">Start Over</button>
             <br><br>
-            <form id="rules-form">
+            <form id="rules-form" onsubmit="viewrules(event)">
                 <button type="button" id="rules-button" onclick="viewrules()">View Rules</button>
                 <br><br>
                 <div id="rules" hidden></div>
@@ -63,7 +63,6 @@
 
     <!-- Your interface markup goes here -->
     <!-- For interface examples, look in the `/examples/` directory in the root of your starter code repo. -->
-    
     <!-- You will want to include something hidden by default, like a <div> or <p> that you can show to -->
     <!-- display the results of the game. Your startOver() function should also clear the result and hide -->
     <!-- the block again. -->
