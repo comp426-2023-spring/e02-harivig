@@ -13,7 +13,8 @@ function playgamefromrpsorrpsls(index) {
     move = choices[index];
 }
 
-function firstsubmit() {
+function firstsubmit(event) {
+    event.preventDefault(event);
     if (opponent) {
         
         document.getElementById("opponent-and-game").hidden = true;
@@ -28,7 +29,7 @@ function firstsubmit() {
 
     } else { 
         if (rps) {
-            console.log("test");
+            //console.log("test");
             var random_move = Math.floor(Math.random() * 3);
             random_move = choices[random_move];
             var api_call = rps_endpoint + random_move;
@@ -53,7 +54,8 @@ function firstsubmit() {
 }
 
 
-function secondsubmit() {
+function secondsubmit(event) {
+    event.preventDefault();
     document.getElementById("lizard-label").hidden = false;
     document.getElementById("spock-label").hidden = false;
     document.getElementById("lizard").hidden = false;
@@ -93,7 +95,8 @@ function playingopponent() {
 }
 
 
-function viewrules() {
+function viewrules(event) {
+    event.preventDefault();
     document.getElementById("rules").innerText =
     `Rules for Rock Paper Scissors:
     - Scissors CUTS Paper
