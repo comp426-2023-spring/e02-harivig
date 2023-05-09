@@ -10,13 +10,11 @@
         <!-- Link to your script file(s) and CSS in here somewhere -->
     </head>
     <body onload="showHideShots()">
-        
-        <div style="text-align:center">
+        <div>
             Rock, Paper, Scissors, (Lizard, Spock)
             <br><br>
         </div>
-
-		<form id="opponent-and-game">
+		<form id="opponent-and-game" onsubmit="firstsubmit(event)">
             Which game would you like to play?
             <br><br>
             <input type="radio" id="rps" name="game" value="rps" checked="checked" onclick="playingrps()">
@@ -49,7 +47,7 @@
         </form>
         <div id="results" hidden></div>
         <br><br>
-        <div style="text-align:center">
+        <div>
             <button type="button" id="startover" onclick="startOver()">Start Over</button>
             <br><br>
             <form id="rules-form">
